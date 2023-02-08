@@ -1,7 +1,15 @@
 import { z } from "zod";
+import { TODO_STATES } from "../../../utils/todoStates";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
+const newRouter = createTRPCRouter({
+  test: protectedProcedure.query(() => {
+    return "test";
+  }),
+});
+
 export const todoRouter = createTRPCRouter({
+  nestedRouter: newRouter,
   getCount: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.todo.count();
   }),
@@ -30,6 +38,23 @@ export const todoRouter = createTRPCRouter({
               email: ctx.session.user.email as string,
             },
           },
+        },
+      });
+    }),
+  updateTodo: protectedProcedure
+    .input(
+      z.object({
+        state: z.enum(TODO_STATES),
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          state: input.state,
         },
       });
     }),

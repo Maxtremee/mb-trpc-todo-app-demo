@@ -35,8 +35,17 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
+const sleep = t.middleware(async ({ next, ...rest }) => {
+  await new Promise((res) => {
+    setTimeout(() => {
+      res(true);
+    }, 2000);
+  });
+  return next(rest);
+});
+
 export const createTRPCRouter = t.router;
-export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure.use(sleep);
 
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
@@ -49,4 +58,4 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = publicProcedure.use(enforceUserIsAuthed);

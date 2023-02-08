@@ -3,8 +3,14 @@ import { api } from "../utils/api";
 
 export default function AddTodo() {
   const [text, setText] = useState("");
+  const utils = api.useContext();
 
-  const { isLoading, mutate } = api.todo.addTodo.useMutation();
+  const { isLoading, mutate } = api.todo.addTodo.useMutation({
+    onSuccess: () => {
+      utils.todo.getCount.refetch();
+      utils.todo.getTodos.refetch();
+    },
+  });
 
   const submit = (event?: FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
