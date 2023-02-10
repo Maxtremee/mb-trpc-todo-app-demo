@@ -21,6 +21,3 @@ type RouterOutput = inferRouterOutputs<AppRouter>;
 
 type HelloInput = RouterInput['hello']
 type HelloOutput = RouterOutput['hello']
-
-
-type test = HelloOutput

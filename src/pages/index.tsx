@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center">
         <div className="container flex flex-col justify-center gap-12 px-4 py-16 ">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:flex-col md:flex-row">
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
               <span className="text-mb">Masterborn</span> tRPC Todo App Demo 🔥
             </h1>
